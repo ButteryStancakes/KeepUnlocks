@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>KeepUnlocks</AssemblyName>
-    <Description>Allows you to keep ship items when run resets. Can configure for suits, furniture, and upgrades.</Description>
+    <Description>Saves certain unlockables when the run resets. Configurable to keep suits, furniture, and/or ship upgrades.</Description>
     <Version>1.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
