@@ -7,10 +7,13 @@ namespace KeepUnlocks
 {
     internal class KeepThis
     {
-        public static List<int> unlocks = new List<int>();
+        static List<int> unlocks = new List<int>();
 
         public static void KeepThisItem(int id)
         {
+            if (unlocks.Contains(id))
+                return;
+
             UnlockableItem item = StartOfRound.Instance.unlockablesList.unlockables[id];
 
             if (item.unlockableType == 0)
@@ -31,6 +34,7 @@ namespace KeepUnlocks
         {
             foreach (int id in unlocks)
                 StartOfRound.Instance.BuyShipUnlockableServerRpc(id, 60);
+
             if (Plugin.configAutoStore.Value)
             {
                 yield return new WaitForSeconds(2f);
@@ -47,8 +51,13 @@ namespace KeepUnlocks
                     }
                 }
             }
+
             unlocks.Clear();
-            yield break;
+        }
+
+        public static void ChangeSave()
+        {
+            unlocks.Clear();
         }
     }
 }
