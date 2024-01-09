@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using HarmonyLib;
-using UnityEngine;
 
 namespace KeepUnlocks.Patches
 {
@@ -11,7 +9,7 @@ namespace KeepUnlocks.Patches
         [HarmonyPrefix]
         public static bool ResetUnlockablesListValues(GameNetworkManager __instance)
         {
-            if (__instance.isHostingGame)
+            if (__instance.isHostingGame && !StartOfRound.Instance.isChallengeFile)
             {
                 for (int i = 0; i < StartOfRound.Instance.unlockablesList.unlockables.Count; i++)
                 {
@@ -27,7 +25,7 @@ namespace KeepUnlocks.Patches
         [HarmonyPostfix]
         public static void ResetShip(StartOfRound __instance)
         {
-            if (__instance.IsServer)
+            if (__instance.IsServer && !__instance.isChallengeFile)
                 __instance.StartCoroutine(KeepThis.RepopulateShipWithUnlocks());
         }
 

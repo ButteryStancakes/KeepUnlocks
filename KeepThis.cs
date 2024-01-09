@@ -32,8 +32,13 @@ namespace KeepUnlocks
 
         public static IEnumerator RepopulateShipWithUnlocks()
         {
+            int credits = TimeOfDay.Instance.quotaVariables.startingCredits;
+            Terminal terminal = Object.FindObjectOfType<Terminal>();
+            if (terminal != null)
+                credits = terminal.groupCredits;
+
             foreach (int id in unlocks)
-                StartOfRound.Instance.BuyShipUnlockableServerRpc(id, 60);
+                StartOfRound.Instance.BuyShipUnlockableServerRpc(id, credits);
 
             if (Plugin.configAutoStore.Value)
             {
