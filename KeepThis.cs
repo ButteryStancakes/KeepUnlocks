@@ -7,9 +7,20 @@ namespace KeepUnlocks
 {
     internal class KeepThis
     {
-        static List<int> unlocks = new List<int>();
+        static List<int> unlocks = new();
 
-        public static void KeepThisItem(int id)
+        internal static void FindItemsToKeep()
+        {
+            unlocks.Clear();
+
+            for (int i = 0; i < StartOfRound.Instance.unlockablesList.unlockables.Count; i++)
+            {
+                if (StartOfRound.Instance.unlockablesList.unlockables[i].hasBeenUnlockedByPlayer)
+                    KeepThisItem(i);
+            }
+        }
+
+        static void KeepThisItem(int id)
         {
             if (unlocks.Contains(id))
                 return;
@@ -21,7 +32,7 @@ namespace KeepUnlocks
                 if (Plugin.configKeepSuits.Value)
                     unlocks.Add(id);
             }
-            else if (item.unlockableName == "Teleporter" || item.unlockableName == "Signal translator" || item.unlockableName == "Loud horn" || item.unlockableName == "Inverse Teleporter")
+            else if (IsShipUpgrade(item))
             {
                 if (Plugin.configKeepUpgrades.Value)
                     unlocks.Add(id);
@@ -30,9 +41,10 @@ namespace KeepUnlocks
                 unlocks.Add(id);
         }
 
-        public static IEnumerator RepopulateShipWithUnlocks()
+        internal static IEnumerator RepopulateShipWithUnlocks()
         {
             int credits = TimeOfDay.Instance.quotaVariables.startingCredits;
+
             Terminal terminal = Object.FindObjectOfType<Terminal>();
             if (terminal != null)
                 credits = terminal.groupCredits;
@@ -45,7 +57,7 @@ namespace KeepUnlocks
                 yield return new WaitForSeconds(2f);
                 foreach (PlaceableShipObject placeableShipObject in Object.FindObjectsOfType<PlaceableShipObject>())
                 {
-                    if (unlocks.Contains(placeableShipObject.unlockableID) && StartOfRound.Instance.unlockablesList.unlockables[placeableShipObject.unlockableID].canBeStored)
+                    if (unlocks.Contains(placeableShipObject.unlockableID) && StartOfRound.Instance.unlockablesList.unlockables[placeableShipObject.unlockableID].canBeStored && !IsShipUpgrade(StartOfRound.Instance.unlockablesList.unlockables[placeableShipObject.unlockableID]))
                     {
                         if (!StartOfRound.Instance.unlockablesList.unlockables[placeableShipObject.unlockableID].spawnPrefab)
                         {
@@ -56,13 +68,11 @@ namespace KeepUnlocks
                     }
                 }
             }
-
-            unlocks.Clear();
         }
 
-        public static void ChangeSave()
+        static bool IsShipUpgrade(UnlockableItem item)
         {
-            unlocks.Clear();
+            return item.unlockableName == "Teleporter" || item.unlockableName == "Signal translator" || item.unlockableName == "Loud horn" || item.unlockableName == "Inverse Teleporter";
         }
     }
 }
