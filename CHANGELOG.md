@@ -1,3 +1,5 @@
+# v1.0.4
+- Hotfix: Patched a different method, since previous version would reset unlockables list twice (and thus prevent anything from carrying over)
 # v1.0.3
 - Ship upgrades no longer get stored with AutoStore enabled
 # v1.0.2
