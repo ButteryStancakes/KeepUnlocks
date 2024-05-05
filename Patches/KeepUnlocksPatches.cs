@@ -5,9 +5,9 @@ namespace KeepUnlocks.Patches
     [HarmonyPatch]
     class KeepUnlocksPatches
     {
-        [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.ResetUnlockablesListValues))]
+        [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.ResetSavedGameValues))]
         [HarmonyPrefix]
-        static void PostResetUnlockablesListValues(GameNetworkManager __instance)
+        static void PreResetSavedGameValues(GameNetworkManager __instance)
         {
             if (__instance.isHostingGame && !StartOfRound.Instance.isChallengeFile)
                 KeepThis.FindItemsToKeep();
