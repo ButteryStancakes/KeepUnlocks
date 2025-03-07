@@ -30,6 +30,7 @@ namespace KeepUnlocks
             // older versions of the mod had this setting in a different section, causing a duplicate config entry
             Config.Bind("Experimental", "AutoStore", false, "Legacy setting, moved to \"Miscellaneous\" section");
             Config.Remove(Config["Experimental", "AutoStore"].Definition);
+            Config.Save();
 
             new Harmony(PLUGIN_GUID).PatchAll();
 
