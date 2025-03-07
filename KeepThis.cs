@@ -45,7 +45,7 @@ namespace KeepUnlocks
         {
             int credits = TimeOfDay.Instance.quotaVariables.startingCredits;
 
-            Terminal terminal = Object.FindObjectOfType<Terminal>();
+            Terminal terminal = Object.FindAnyObjectByType<Terminal>();
             if (terminal != null)
                 credits = terminal.groupCredits;
 
@@ -55,7 +55,7 @@ namespace KeepUnlocks
             if (Plugin.configAutoStore.Value)
             {
                 yield return new WaitForSeconds(2f);
-                foreach (PlaceableShipObject placeableShipObject in Object.FindObjectsOfType<PlaceableShipObject>())
+                foreach (PlaceableShipObject placeableShipObject in Object.FindObjectsByType<PlaceableShipObject>(FindObjectsSortMode.None))
                 {
                     if (unlocks.Contains(placeableShipObject.unlockableID) && StartOfRound.Instance.unlockablesList.unlockables[placeableShipObject.unlockableID].canBeStored && !IsShipUpgrade(StartOfRound.Instance.unlockablesList.unlockables[placeableShipObject.unlockableID]))
                     {
@@ -72,7 +72,8 @@ namespace KeepUnlocks
 
         static bool IsShipUpgrade(UnlockableItem item)
         {
-            return item.unlockableName == "Teleporter" || item.unlockableName == "Signal translator" || item.unlockableName == "Loud horn" || item.unlockableName == "Inverse Teleporter";
+            return item.unlockableName == "Teleporter" || item.unlockableName == "Signal translator" || item.unlockableName == "Loud horn" || item.unlockableName == "Inverse Teleporter"
+                || item.unlockableName == "Bodycam"; // OpenBodyCams
         }
     }
 }
